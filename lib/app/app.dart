@@ -26,6 +26,7 @@ import 'package:eschool/data/repositories/resultRepository.dart';
 import 'package:eschool/data/repositories/settingsRepository.dart';
 import 'package:eschool/data/repositories/studentRepository.dart';
 import 'package:eschool/data/repositories/systemInfoRepository.dart';
+import 'package:eschool/firebase_options.dart';
 import 'package:eschool/ui/screens/exam/onlineExam/cubits/examOnlineCubit.dart';
 import 'package:eschool/ui/screens/reports/cubits/assignmentReportCubit.dart';
 import 'package:eschool/ui/screens/reports/cubits/onlineExamReportCubit.dart';
@@ -50,8 +51,7 @@ class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -75,7 +75,8 @@ Future<void> initializeApp() async {
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // await Firebase.initializeApp();
 
   // Pass all uncaught "fatal" errors from the framework to Crashlytics
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
@@ -122,8 +123,7 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider<AuthCubit>(create: (_) => AuthCubit(AuthRepository())),
         BlocProvider<StudentDashboardCubit>(
-          create: (_) =>
-              StudentDashboardCubit(studentRepository: StudentRepository()),
+          create: (_) => StudentDashboardCubit(studentRepository: StudentRepository()),
         ),
         BlocProvider<NoticeBoardCubit>(
           create: (context) => NoticeBoardCubit(AnnouncementRepository()),
@@ -131,63 +131,38 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<AppConfigurationCubit>(
           create: (context) => AppConfigurationCubit(SystemRepository()),
         ),
-        BlocProvider<ExamDetailsCubit>(
-          create: (context) => ExamDetailsCubit(StudentRepository()),
-        ),
-        BlocProvider<StudentFeesCubit>(
-          create: (context) => StudentFeesCubit(StudentRepository()),
-        ),
-        BlocProvider<FeesPaymentCubit>(
-          create: (context) => FeesPaymentCubit(StudentRepository()),
-        ),
+        BlocProvider<ExamDetailsCubit>(create: (context) => ExamDetailsCubit(StudentRepository())),
+        BlocProvider<StudentFeesCubit>(create: (context) => StudentFeesCubit(StudentRepository())),
+        BlocProvider<FeesPaymentCubit>(create: (context) => FeesPaymentCubit(StudentRepository())),
         BlocProvider<PostFeesPaymentCubit>(
           create: (context) => PostFeesPaymentCubit(StudentRepository()),
         ),
-        BlocProvider<FeesReceiptCubit>(
-          create: (context) => FeesReceiptCubit(StudentRepository()),
-        ),
-        BlocProvider<ResultTabSelectionCubit>(
-          create: (_) => ResultTabSelectionCubit(),
-        ),
-        BlocProvider<ReportTabSelectionCubit>(
-          create: (_) => ReportTabSelectionCubit(),
-        ),
+        BlocProvider<FeesReceiptCubit>(create: (context) => FeesReceiptCubit(StudentRepository())),
+        BlocProvider<ResultTabSelectionCubit>(create: (_) => ResultTabSelectionCubit()),
+        BlocProvider<ReportTabSelectionCubit>(create: (_) => ReportTabSelectionCubit()),
         BlocProvider<OnlineExamReportCubit>(
           create: (_) => OnlineExamReportCubit(ReportRepository()),
         ),
         BlocProvider<AssignmentReportCubit>(
           create: (_) => AssignmentReportCubit(ReportRepository()),
         ),
-        BlocProvider<ExamTabSelectionCubit>(
-          create: (_) => ExamTabSelectionCubit(),
-        ),
-        BlocProvider<ExamOnlineCubit>(
-          create: (_) => ExamOnlineCubit(ExamOnlineRepository()),
-        ),
-        BlocProvider<ExamsOnlineCubit>(
-          create: (_) => ExamsOnlineCubit(ExamOnlineRepository()),
-        ),
+        BlocProvider<ExamTabSelectionCubit>(create: (_) => ExamTabSelectionCubit()),
+        BlocProvider<ExamOnlineCubit>(create: (_) => ExamOnlineCubit(ExamOnlineRepository())),
+        BlocProvider<ExamsOnlineCubit>(create: (_) => ExamsOnlineCubit(ExamOnlineRepository())),
         BlocProvider<ResultsOnlineCubit>(
           create: (_) => ResultsOnlineCubit(ResultOnlineRepository()),
         ),
-        BlocProvider<ChatUsersCubit>(
-          create: (context) => ChatUsersCubit(ChatRepository()),
-        ),
+        BlocProvider<ChatUsersCubit>(create: (context) => ChatUsersCubit(ChatRepository())),
       ],
       child: Builder(
         builder: (context) {
-          final currentLanguage = context
-              .watch<AppLocalizationCubit>()
-              .state
-              .language;
+          final currentLanguage = context.watch<AppLocalizationCubit>().state.language;
 
           return MaterialApp(
             navigatorKey: UiUtils.rootNavigatorKey,
             theme: Theme.of(context).copyWith(
               primaryColor: primaryColor,
-              textTheme: GoogleFonts.poppinsTextTheme(
-                Theme.of(context).textTheme,
-              ),
+              textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
               scaffoldBackgroundColor: pageBackgroundColor,
               colorScheme: Theme.of(context).colorScheme.copyWith(
                 primary: primaryColor,
@@ -209,11 +184,7 @@ class _MyAppState extends State<MyApp> {
                   ),
                   child: ColoredBox(
                     color: pageBackgroundColor,
-                    child: SafeArea(
-                      top: false,
-                      bottom: Platform.isAndroid,
-                      child: widget!,
-                    ),
+                    child: SafeArea(top: false, bottom: Platform.isAndroid, child: widget!),
                   ),
                 ),
               );
@@ -226,9 +197,7 @@ class _MyAppState extends State<MyApp> {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: appLanguages.map((appLanguage) {
-              return UiUtils.getLocaleFromLanguageCode(
-                appLanguage.languageCode,
-              );
+              return UiUtils.getLocaleFromLanguageCode(appLanguage.languageCode);
             }).toList(),
             debugShowCheckedModeBanner: false,
             initialRoute: Routes.splash,

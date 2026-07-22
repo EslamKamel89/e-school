@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "373176237665",
+    "project_id": "schoolhub-3a01f",
+    "storage_bucket": "schoolhub-3a01f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:373176237665:android:bea0d4b08239320ef0f420",
+        "android_client_info": {
+          "package_name": "com.gaztec.schoolhub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCb5k4PbdwkeAOhnFQYAvDTcN13hINB_qQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

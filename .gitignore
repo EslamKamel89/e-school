@@ -50,3 +50,6 @@ pubspec.lock
 .fvm/
 .fvmrc
 .vscode/
+summarize.py
+code.txt
+env.dart
