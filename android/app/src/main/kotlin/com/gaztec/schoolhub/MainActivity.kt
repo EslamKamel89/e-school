@@ -1,4 +1,4 @@
-package com.wrteam.eschool
+package com.gaztec.schoolhub
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 
